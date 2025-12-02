@@ -48,7 +48,8 @@ ESP32 harus mengirim data ke backend:
 
 Body JSON:
 
-```sh {
+```sh
+{
   "temperature": 30,
   "humidity": 65,
   "mq2": 200
