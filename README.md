@@ -18,6 +18,7 @@ Masuk ke folder backend:
 cd backend
 npm install
 node server.js
+```
 
 
 Jika berhasil akan muncul:
