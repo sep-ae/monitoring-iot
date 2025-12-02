@@ -1,44 +1,38 @@
-Monitoring IoT – Simple README
+README.md
+# 🛰️ Monitoring IoT
 
-Project ini adalah sistem monitoring IoT yang terdiri dari:
+Project ini adalah sistem Monitoring IoT yang menggunakan:
 
-Backend (Node.js) → menerima data sensor, deteksi kebakaran, kirim broadcast WS, dan kirim notifikasi WhatsApp (Baileys).
+- **ESP32** untuk mengirim data sensor (Suhu, Kelembaban, MQ2)
+- **Backend Node.js** untuk menerima data, deteksi kebakaran, dan mengirim notifikasi WhatsApp
+- **Frontend Vue.js** sebagai dashboard realtime
 
-Frontend (Vue.js) → dashboard untuk menampilkan data sensor secara realtime.
+---
 
-ESP32 → mengirim data suhu, kelembaban, dan MQ2 ke backend.
+## 📦 Instalasi
 
-📦 Cara Install
-1. Clone Project (opsional jika dari GitHub)
-git clone <repo-url>
-cd MONITORING-IOT
-
-📡 Backend Setup
-
+### 1. Backend (Node.js)
 Masuk ke folder backend:
 
+```sh
 cd backend
 npm install
-
-
-Jalankan backend:
-
 node server.js
 
 
-Jika berhasil:
+Jika berhasil akan muncul:
 
 🔥 Server running on http://localhost:3000
 
 
-Untuk login WhatsApp, buka:
+Untuk login WhatsApp, buka browser:
 
 http://localhost:3000/wa/qr
 
 
-Scan QR via WA agar backend bisa mengirim alert.
+Scan QR melalui WhatsApp agar sistem bisa mengirim alert.
 
-🖥 Frontend Setup
+2. Frontend (Vue.js Dashboard)
 
 Masuk ke folder frontend:
 
@@ -51,31 +45,30 @@ Akses dashboard:
 
 http://localhost:5173
 
-📡 Integrasi ESP32
+📡 ESP32 → Backend
 
 ESP32 harus mengirim data ke backend:
 
 POST http://<ip-backend>:3000/sensor
-
 
 Body JSON:
 
 {
   "temperature": 30,
   "humidity": 65,
-  "mq2": 210
+  "mq2": 200
 }
 
 🔥 Fitur Utama
 
-Monitoring suhu, kelembaban, MQ2 realtime
+Monitoring sensor realtime
 
 Deteksi kebakaran otomatis
 
 Broadcast WebSocket ke dashboard
 
-Kirim WhatsApp Alert
+WhatsApp Alert menggunakan Baileys
 
 Kontrol Pump & Buzzer dari dashboard
 
-Auto-reconnect WhatsApp
+Auto reconnect WhatsApp
