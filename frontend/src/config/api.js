@@ -16,11 +16,15 @@ export const API_ENDPOINTS = {
     RESET_OVERRIDE:     `${API_ROOT}/reset-override`,
 
     // ================================
+    // WA MESSAGE STATS (BARU)
+    // ================================
+    WA_COUNT:           `${API_ROOT}/wa/stats`,   // <---- TAMBAHKAN INI BRO
+
+    // ================================
     // WEBSOCKET SERVER
     // ================================
-    WS: WS_ROOT,        // untuk real-time (MQ2, suhu, alarm)
+    WS: WS_ROOT,
 };
-
 export const WA_API = {
     QR: `${API_ROOT}/wa/qr`,
     LIST: `${API_ROOT}/wa/list`,
@@ -29,5 +33,9 @@ export const WA_API = {
     DELETE: `${API_ROOT}/wa/delete`,
     SEND: `${API_ROOT}/wa/send`,
     STATUS: `${API_ROOT}/wa/status`,
+
+    // Tambahan untuk statistik pesan
+    STATS: `${API_ROOT}/wa/stats`,  // opsional, kalau mau WA_API juga punya
 };
+
 

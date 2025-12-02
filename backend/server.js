@@ -19,6 +19,7 @@ import {
     controlBuzzer,
     resetOverride
 } from "./modules/iot.js";
+import fs from "fs";
 
 const app = express();
 app.use(cors());
@@ -145,4 +146,40 @@ app.post("/wa/send", async (req, res) => {
     await sendToAll(waNumbers, message);
 
     res.json({ success: true, sent: waNumbers.length });
+});
+
+app.get("/wa/stats", (req, res) => {
+    const file = "./data/message_log.json";
+
+    if (!fs.existsSync(file)) {
+        return res.json({
+            total_messages: 0,
+            success_messages: 0,
+            failed_messages: 0
+        });
+    }
+
+    let logs = [];
+
+    try {
+        const raw = fs.readFileSync(file, "utf8");
+        logs = JSON.parse(raw);
+    } catch (err) {
+        console.error("Error parsing WA log file:", err);
+        return res.json({
+            total_messages: 0,
+            success_messages: 0,
+            failed_messages: 0
+        });
+    }
+
+    const total = logs.length;
+    const success = logs.filter(l => l.status === "success").length;
+    const failed = logs.filter(l => l.status === "failed").length;
+
+    res.json({
+        total_messages: total,
+        success_messages: success,
+        failed_messages: failed
+    });
 });

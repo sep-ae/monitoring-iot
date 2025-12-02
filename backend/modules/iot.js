@@ -21,21 +21,28 @@ export async function handleSensorPost(req, res) {
   sensorData.humidity = humidity;
   sensorData.mq2 = mq2;
 
-  // broadcast realtime ke dashboard (JSON)
+  // ================================
+  // BROADCAST REALTIME KE DASHBOARD
+  // ================================
   broadcast({
     type: "sensor_update",
     data: sensorData
   });
 
-  // cek kebakaran
+  // ================================
+  // CEK KEBAKARAN
+  // ================================
   checkFire(
     sensorData,
 
+    // ========== FIRE DETECTED ==========
     async () => {
       if (!sensorData.fire) {
         sensorData.fire = true;
+
         broadcast({ type: "fire_detected", data: sensorData });
 
+        // ALERT WA (cooldown 30s)
         if (!fireCooldown) {
           fireCooldown = true;
           const list = loadWaNumbers();
@@ -43,19 +50,40 @@ export async function handleSensorPost(req, res) {
           setTimeout(() => fireCooldown = false, 30000);
         }
 
-        // otomatis ON-kan relay ke ESP32
+        // ============================
+        // TURN ON PUMP & BUZZER (ESP32)
+        // ============================
         broadcast("PUMP ON");
         broadcast("BUZZER ON");
+
+        // ============================
+        // SYNC STATE KE DASHBOARD
+        // ============================
+        sensorData.pump = true;
+        sensorData.buzzer = true;
+
+        broadcast({ type: "pump_control", state: true });
+        broadcast({ type: "buzzer_control", state: true });
       }
     },
 
+    // ========== FIRE CLEARED ==========
     () => {
       if (sensorData.fire) {
         sensorData.fire = false;
+
         broadcast({ type: "fire_cleared", data: sensorData });
 
+        // turn off physical relays di ESP32
         broadcast("PUMP OFF");
         broadcast("BUZZER OFF");
+
+        // sync dashboard juga
+        sensorData.pump = false;
+        sensorData.buzzer = false;
+
+        broadcast({ type: "pump_control", state: false });
+        broadcast({ type: "buzzer_control", state: false });
       }
     }
   );
@@ -63,18 +91,24 @@ export async function handleSensorPost(req, res) {
   res.send("OK");
 }
 
+// ================================
+// GET SENSOR VALUE NOW
+// ================================
 export function getSensorData(req, res) {
   res.json(sensorData);
 }
 
+// ================================
+// MANUAL CONTROL PUMP
+// ================================
 export function controlPump(req, res) {
   const { state } = req.body;
   sensorData.pump = state;
 
-  // untuk ESP32
+  // ke ESP32
   broadcast(state ? "PUMP ON" : "PUMP OFF");
 
-  // untuk dashboard
+  // dashboard
   broadcast({
     type: "pump_control",
     state
@@ -83,6 +117,9 @@ export function controlPump(req, res) {
   res.send("OK");
 }
 
+// ================================
+// MANUAL CONTROL BUZZER
+// ================================
 export function controlBuzzer(req, res) {
   const { state } = req.body;
   sensorData.buzzer = state;
@@ -97,6 +134,9 @@ export function controlBuzzer(req, res) {
   res.send("OK");
 }
 
+// ================================
+// RESET MANUAL OVERRIDE
+// ================================
 export function resetOverride(req, res) {
   broadcast("RESET");
   res.json({ success: true, message: "Override reset" });

@@ -17,12 +17,13 @@
                         <i class="pi pi-comments text-blue-500 !text-xl"></i>
                     </div>
                 </div>
+
                 <span class="text-primary font-medium">{{ total }}</span>
-                <span class="text-muted-color"> Pesan tercatat</span>
+                <span class="text-muted-color"> pesan tercatat</span>
             </div>
         </div>
 
-        <!-- BERHASIL -->
+        <!-- PESAN SUKSES -->
         <div class="col-span-12 lg:col-span-6 xl:col-span-3">
             <div class="card mb-0">
                 <div class="flex justify-between mb-4">
@@ -38,12 +39,13 @@
                         <i class="pi pi-check-circle text-green-500 !text-xl"></i>
                     </div>
                 </div>
-                <span class="text-primary font-medium">{{ success }}</span>
+
+                <span class="text-green-600 font-medium">{{ success }}</span>
                 <span class="text-muted-color"> sukses terkirim</span>
             </div>
         </div>
 
-        <!-- GAGAL -->
+        <!-- PESAN GAGAL -->
         <div class="col-span-12 lg:col-span-6 xl:col-span-3">
             <div class="card mb-0">
                 <div class="flex justify-between mb-4">
@@ -59,12 +61,13 @@
                         <i class="pi pi-times-circle text-red-500 !text-xl"></i>
                     </div>
                 </div>
+
                 <span class="text-red-600 font-medium">{{ failed }}</span>
                 <span class="text-muted-color"> gagal terkirim</span>
             </div>
         </div>
 
-        <!-- STATUS WA -->
+        <!-- STATUS WHATSAPP -->
         <div class="col-span-12 lg:col-span-6 xl:col-span-3">
             <div class="card mb-0">
                 <div class="flex justify-between mb-4">
@@ -80,10 +83,11 @@
                         <i class="pi pi-whatsapp text-green-500 !text-xl"></i>
                     </div>
                 </div>
-                <span class="text-primary font-medium">
+
+                <span :class="connected ? 'text-green-600' : 'text-red-600'">
                     {{ connected ? 'Terhubung' : 'Terputus' }}
                 </span>
-                <span class="text-muted-color"> Gateway WhatsApp</span>
+                <span class="text-muted-color"> • Gateway WhatsApp</span>
             </div>
         </div>
 
@@ -101,16 +105,18 @@ const connected = ref(false);
 
 async function loadWAStats() {
     try {
+        // cek status WA online/offline
         const resStatus = await fetch(WA_API.STATUS);
         const status = await resStatus.json();
         connected.value = status.connected;
 
+        // load statistik pesan
         const resStats = await fetch(API_ENDPOINTS.WA_COUNT);
         const data = await resStats.json();
 
-        total.value = data.total_messages ?? 0;
+        total.value   = data.total_messages   ?? 0;
         success.value = data.success_messages ?? 0;
-        failed.value = data.failed_messages ?? 0;
+        failed.value  = data.failed_messages  ?? 0;
 
     } catch (err) {
         console.error("Gagal load WA stats:", err);
@@ -119,6 +125,6 @@ async function loadWAStats() {
 
 onMounted(() => {
     loadWAStats();
-    setInterval(loadWAStats, 15000);
+    setInterval(loadWAStats, 10000);
 });
 </script>

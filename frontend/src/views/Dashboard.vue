@@ -1,7 +1,7 @@
 <script setup>
 import StatsWidget from '@/components/dashboard/StatsWidget.vue';
 import ControlWidget from '@/components/dashboard/ControlWidget.vue';
-import NotificationsWidget from '@/components/dashboard/NotificationsWidget.vue';
+import NotificationsWidget from '@/components/dashboard/ChartWidget.vue';
 </script>
 
 <template>
@@ -15,6 +15,9 @@ import NotificationsWidget from '@/components/dashboard/NotificationsWidget.vue'
             <ControlWidget />
         </div>
 
+        <div class="col-span-12">
+            <ChartWidget />
+        </div>
 
     </div>
 </template>

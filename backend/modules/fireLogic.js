@@ -1,16 +1,25 @@
+let lastFireState = false;
+
 export function checkFire(sensor, onFireCallback, onNormalCallback) {
-  const { temperature, mq2 } = sensor
+  const { temperature, mq2 } = sensor;
 
-  const TEMP_THRESHOLD = 60
-  const MQ2_THRESHOLD = 1000
+  const TEMP_THRESHOLD = 60;
+  const MQ2_THRESHOLD = 1000;
 
-  let fire = (temperature >= TEMP_THRESHOLD) || (mq2 >= MQ2_THRESHOLD)
+  const fire = (temperature >= TEMP_THRESHOLD) || (mq2 >= MQ2_THRESHOLD);
 
-  if (fire) {
-    onFireCallback()
-  } else {
-    onNormalCallback()
+  // FIRE BARU TERDETEKSI
+  if (fire && !lastFireState) {
+    onFireCallback();
   }
 
-  return fire
+  // API PADAM
+  if (!fire && lastFireState) {
+    onNormalCallback();
+  }
+
+  // simpan state
+  lastFireState = fire;
+
+  return fire;
 }
