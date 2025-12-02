@@ -23,53 +23,43 @@ node server.js
 
 Jika berhasil akan muncul:
 
-🔥 Server running on http://localhost:3000
+```Server running on http://localhost:3000```
 
 
-Untuk login WhatsApp, buka browser:
-
-http://localhost:3000/wa/qr
-
-
-Scan QR melalui WhatsApp agar sistem bisa mengirim alert.
-
-2. Frontend (Vue.js Dashboard)
+## 2. Frontend (Vue.js Dashboard)
 
 Masuk ke folder frontend:
 
-cd frontend
+```sh cd frontend
 npm install
 npm run dev
+```
 
 
 Akses dashboard:
 
-http://localhost:5173
+```http://localhost:5173```
 
 📡 ESP32 → Backend
 
 ESP32 harus mengirim data ke backend:
 
-POST http://<ip-backend>:3000/sensor
+```POST http://<ip-backend>:3000/sensor```
 
 Body JSON:
 
-{
+```sh {
   "temperature": 30,
   "humidity": 65,
   "mq2": 200
 }
+```
 
 🔥 Fitur Utama
 
-Monitoring sensor realtime
-
-Deteksi kebakaran otomatis
-
-Broadcast WebSocket ke dashboard
-
-WhatsApp Alert menggunakan Baileys
-
-Kontrol Pump & Buzzer dari dashboard
-
-Auto reconnect WhatsApp
+- Monitoring sensor realtime
+- Deteksi kebakaran otomatis
+- Broadcast WebSocket ke dashboard
+- WhatsApp Alert menggunakan Baileys
+- Kontrol Pump & Buzzer dari dashboard
+- Auto reconnect WhatsApp
