@@ -48,5 +48,4 @@ tmp/
 temp/
 *.tmp
 
-message_log.json
-wa_numbers.json
+data/
